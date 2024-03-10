@@ -86,7 +86,8 @@ router.post("/:id/comments", (req, res) => {
   // 2. Add to the comments array
   // 3. Write the entire new comments array to the file
   const videos = readVideos();
-  let singleVideo = videos.filter((videos) => videos.id === req.params.id);
+  let singleVideo = videos.find((videos) => videos.id === req.params.id);
+  console.log(singleVideo.comments);
   singleVideo.comments.push(newComment);
   fs.writeFileSync("./data/videos.json", JSON.stringify(videos));
   // Respond with the video that was createdwriteVideos

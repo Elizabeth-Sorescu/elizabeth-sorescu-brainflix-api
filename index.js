@@ -19,10 +19,6 @@ app.use(express.json());
 // app.use("/static", express.static(path.join(__dirname, "public")));
 // app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static("public")); //"public" //http://localhost:8080/images/Upload-video-preview.jpg
-// app.use(
-//   "http://localhost:8080/images/upload-video-preview.jpg",
-//   express.static("public")
-// );
 
 // This middleware is just a basic example that runs on every request
 // Calling next() is how you pass control to the next middleware
