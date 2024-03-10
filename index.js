@@ -19,6 +19,10 @@ app.use(express.json());
 // app.use("/static", express.static(path.join(__dirname, "public")));
 // app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static("public")); //"public" //http://localhost:8080/images/Upload-video-preview.jpg
+// app.use(
+//   "http://localhost:8080/images/upload-video-preview.jpg",
+//   express.static("public")
+// );
 
 // This middleware is just a basic example that runs on every request
 // Calling next() is how you pass control to the next middleware
@@ -47,7 +51,6 @@ app.use((req, res, next) => {
   next();
 });
 
-/////
 // To use routing, we define the endpoint using middleware syntax.
 // The first paramater is the path, and the second is the router module.
 // Your routes will be available at this path slash whatever your router endpoints are.

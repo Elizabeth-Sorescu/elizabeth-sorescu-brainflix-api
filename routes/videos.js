@@ -10,14 +10,6 @@ function readVideos() {
   return parsedData;
 }
 
-///////
-function writeVideos() {
-  fs.writeFileSync("./data/videos.json", JSON.stringify(videos));
-
-  // Respond with the video that was created
-  res.status(201).json(newVideo);
-}
-
 // This middleware runs on every qequest to this router
 router.use((_req, _res, next) => {
   console.log("Middleware from videos router");
@@ -54,7 +46,7 @@ router.post("/", (req, res) => {
     id: uuidv4(),
     // title: req.body.title,
     title,
-    channel: "Anonymous User", //req.body.channel,
+    channel: "Anonymous", //req.body.channel,
     image: "http://localhost:8080/images/upload-video-preview.jpg", //req.body.image,
     description,
     // description: req.body.description,
@@ -71,9 +63,50 @@ router.post("/", (req, res) => {
   const videos = readVideos();
   videos.push(newVideo);
   fs.writeFileSync("./data/videos.json", JSON.stringify(videos));
-
   // Respond with the video that was created
   res.status(201).json(newVideo);
+});
+
+// POST endpoint to add a comment
+router.post("/:id/comments", (req, res) => {
+  debugger;
+  const { comment, name } = req.body;
+  console.log(req.params.id);
+  // Make a new comment with a unique ID
+  const newComment = {
+    //create a new unique id
+    id: uuidv4(),
+    // title: req.body.title,
+    name: name,
+    comment: comment,
+    likes: "0",
+    timestamp: Date.now(),
+  };
+  // 1. Read the current comments array
+  // 2. Add to the comments array
+  // 3. Write the entire new comments array to the file
+  const videos = readVideos();
+  let singleVideo = videos.filter((videos) => videos.id === req.params.id);
+  singleVideo.comments.push(newComment);
+  fs.writeFileSync("./data/videos.json", JSON.stringify(videos));
+  // Respond with the video that was createdwriteVideos
+  res.status(201).json(newComment);
+});
+
+// DELETE endpoint to remove an individual video
+router.delete("/:id", (req, res) => {
+  /* TODO: ACTUALLY DO THESE STEPS */
+  // 1. Read from the file
+  const videos = readVideos();
+  // 2. Mutate the array to remove the video with that id
+  // filter for videos that don't have the req.params.id
+  let removedVideosList = videos.filter((videos) => videos.id != req.params.id);
+  console.log(`Removed list contains ${removedVideosList.length} video(s)`);
+  // 3. Write the new array to the file
+  fs.writeFileSync("./data/videos.json", JSON.stringify(removedVideosList));
+
+  // Respond with a message that the video has been deleted
+  res.status(204).send("You deleted a video");
 });
 
 // Finally, export the router for use in index.js
