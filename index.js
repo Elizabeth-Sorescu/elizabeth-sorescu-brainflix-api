@@ -2,34 +2,24 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const PORT = process.env.PORT || process.argv[2] || 8080;
-// const { v4: uuidv4 } = require("uuid");
+
 const videosRoute = require("./routes/videos");
 require("dotenv").config();
 
-// this middleware allows us to post JSON in request.body
+// this middleware allows to post JSON in request.body
 app.use(cors()); //accept all hosts "*""
 
 // this middleware implements Cross origin Resource Sharing (CORS)
 app.use(express.json());
 
-/////
 // This middleware allows us to serve static files from a folder.
 // Keep in mind that the folder name will *not* be part of the request path.
-// app.use("/static-files", express.static("files"));
-// app.use("/static", express.static(path.join(__dirname, "public")));
-// app.use(express.static(path.join(__dirname, "public")));
-app.use(express.static("public")); //"public" //http://localhost:8080/images/Upload-video-preview.jpg
+app.use(express.static("public"));
 
 // This middleware is just a basic example that runs on every request
 // Calling next() is how you pass control to the next middleware
 app.use((_req, _res, next) => {
-  console.log("Middleware running");
-  next();
-});
-
-// This middleware is another basic example that runs on every request
-app.use((_req, _res, next) => {
-  console.log("Middleware number 2 running");
+  console.log("Middleware running from the server");
   next();
 });
 
