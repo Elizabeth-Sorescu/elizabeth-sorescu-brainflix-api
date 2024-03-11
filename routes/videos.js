@@ -98,7 +98,9 @@ router.delete("/:id", (req, res) => {
 
   // 2. Mutate the array to remove the video with that id
   // filter for videos that don't have the req.params.id
-  let removedVideosList = videos.filter((videos) => videos.id != req.params.id);
+  let removedVideosList = videos.filter(
+    (videos) => videos.id !== req.params.id
+  );
   console.log(`Removed list contains ${removedVideosList.length} video(s)`);
 
   // 3. Write the new array to the file
@@ -106,6 +108,41 @@ router.delete("/:id", (req, res) => {
 
   // Respond with a message that the video has been deleted
   res.status(204).send("You deleted a video");
+});
+
+// DELETE endpoint to remove an individual video
+router.delete("/:id/comments/:commentId", (req, res) => {
+  // 1. Read from the file
+  let videos = readVideos();
+
+  // 2. Mutate the array to remove the video with that id
+  // filter for videos that don't have the req.params.id
+  let video = videos.find((videos) => videos.id === req.params.id);
+
+  let commentList = video.comments;
+
+  let newCommentsList = commentList.filter(
+    (comments) => comments.id !== req.params.commentId
+  );
+
+  video.comments = [];
+  video.comments = newCommentsList;
+
+  let removedVideosList = videos.filter(
+    (videos) => videos.id !== req.params.id
+  );
+
+  fs.writeFileSync("./data/videos.json", JSON.stringify(removedVideosList));
+
+  videos = readVideos();
+
+  videos.push(video);
+
+  // 3. Write the new array to the file
+  fs.writeFileSync("./data/videos.json", JSON.stringify(videos));
+
+  // Respond with a message that the video has been deleted
+  res.status(204).send("You deleted a comment");
 });
 
 // Finally, export the router for use in index.js
